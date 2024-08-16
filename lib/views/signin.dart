@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
+import 'dashboard.dart';
 import 'forgetpasswordview.dart';
 import 'reset_password.dart';
 
@@ -68,7 +69,7 @@ class SigninView extends StatelessWidget {
               SizedBox(height: 70.h),
               ElevatedButton(
                 onPressed: () {
-
+                  Get.to(() => DashboardView());
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(50.w, 40.h),
