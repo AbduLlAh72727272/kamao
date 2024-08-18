@@ -23,12 +23,12 @@ class CustomBottomNavBar extends StatelessWidget {
           topRight: Radius.circular(20.r),
         ),
       ),
-      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 20.w),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildNavItem(0, VoidImages.home, selectedIndex == 0),
-          _buildNavItem(1, VoidImages.coin, selectedIndex == 1),
+          _buildNavItem(1, VoidImages.dollar, selectedIndex == 1),
           _buildNavItem(2, VoidImages.crown, selectedIndex == 2),
           _buildNavItem(3, VoidImages.tasks, selectedIndex == 3),
           _buildNavItem(4, VoidImages.user, selectedIndex == 4),
@@ -38,23 +38,17 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 
   Widget _buildNavItem(int index, String iconPath, bool isSelected) {
-    double size = index == 3 ? 60.w : 30.w; // Adjust size for the 3rd index
     return GestureDetector(
-      onTap: () => onItemSelected(index),
+      onTap: () {
+        onItemSelected(index);
+      },
       child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: isSelected ? VoidColors.primary : Colors.transparent,
-            width: 2.w,
-          ),
-        ),
         padding: EdgeInsets.all(8.w),
         child: Image.asset(
           iconPath,
-          width: size,
-          height: size,
-          // color: isSelected ? VoidColors.primary : Colors.white,
+          width: 30.w,
+          height: 30.w,
+          color: isSelected ? VoidColors.primary : Colors.white,
         ),
       ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:kamao/views/settings_view.dart';
+import 'package:kamao/views/verification.dart';
+import 'BalanceDetailsView.dart';
 import '../common/custom_bottom_nav_bar.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
@@ -31,7 +34,7 @@ class _DashboardViewState extends State<DashboardView> {
         leading: IconButton(
           icon: Image.asset(VoidImages.side, width: 45.w, height: 45.h),
           onPressed: () {
-            // Add functionality for side menu or drawer
+            Get.to(() => const SettingsView());
           },
         ),
         centerTitle: true,
@@ -43,32 +46,37 @@ class _DashboardViewState extends State<DashboardView> {
             children: [
               SizedBox(height: 10.h),
               // Earnings Tile
-              Stack(
-                children: [
-                  Image.asset(
-                    VoidImages.small_tile,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 45.h,
-                  ),
-                  Positioned(
-                    left: 20.w,
-                    top: 13.h,
-                    child: Text(
-                      'Total Earnings : \$5,450.500',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const BalanceDetailsView()); // Navigate to BalanceDetailsView
+                },
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      VoidImages.small_tile,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 45.h,
+                    ),
+                    Positioned(
+                      left: 20.w,
+                      top: 13.h,
+                      child: Text(
+                        'Total Earnings : \$5,450.500',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    right: 20.w,
-                    top: 13.h,
-                    child: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20.sp),
-                  ),
-                ],
+                    Positioned(
+                      right: 20.w,
+                      top: 13.h,
+                      child: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20.sp),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 20.h),
               // Verify Identity Button
@@ -76,7 +84,7 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Add functionality for Verify Your Identity button
+                      Get.to(()=>VerificationView());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: VoidColors.primary,
@@ -272,10 +280,10 @@ class _DashboardViewState extends State<DashboardView> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemTapped,
-      ),
+      // bottomNavigationBar: CustomBottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onItemSelected: _onItemTapped,
+      // ),
     );
   }
 }
