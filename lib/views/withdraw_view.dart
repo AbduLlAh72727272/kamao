@@ -13,7 +13,7 @@ class WithdrawView extends StatefulWidget {
 }
 
 class _WithdrawViewState extends State<WithdrawView> {
-  String _selectedMethod = 'PayPal'; // Default selection is PayPal
+  String _selectedMethod = 'PayPal';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _WithdrawViewState extends State<WithdrawView> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView( // Made the screen scrollable
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +183,7 @@ class _WithdrawViewState extends State<WithdrawView> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          // Handle withdrawal logic
+
           Get.to(() => const BalanceDetailsView());
         },
         style: ElevatedButton.styleFrom(

@@ -160,7 +160,7 @@ class _OtpViewState extends State<OtpView> {
               if (index < _otpControllers.length - 1) {
                 FocusScope.of(context).nextFocus();
               } else {
-                FocusScope.of(context).unfocus(); // Close the keyboard on last box
+                FocusScope.of(context).unfocus();
               }
             }
           },

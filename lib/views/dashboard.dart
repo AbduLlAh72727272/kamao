@@ -48,7 +48,7 @@ class _DashboardViewState extends State<DashboardView> {
               // Earnings Tile
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const BalanceDetailsView()); // Navigate to BalanceDetailsView
+                  Get.to(() => const BalanceDetailsView());
                 },
                 child: Stack(
                   children: [
@@ -217,7 +217,7 @@ class _DashboardViewState extends State<DashboardView> {
                     right: 100.w,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Add functionality for Watch button
+
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: VoidColors.primary,
@@ -239,7 +239,7 @@ class _DashboardViewState extends State<DashboardView> {
                 ],
               ),
               SizedBox(height: 20.h),
-              // Banner 4 with Invite & Earn Button
+
               Stack(
                 children: [
                   Image.asset(
@@ -253,7 +253,7 @@ class _DashboardViewState extends State<DashboardView> {
                     right: 20.w,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Add functionality for Invite & Earn button
+
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: VoidColors.primary,

@@ -109,7 +109,6 @@ class _VerificationViewState extends State<VerificationView> {
               ],
             ),
           ),
-          // Button that appears on top of the faded content
           if (_showButton)
             Center(
               child: Padding(
