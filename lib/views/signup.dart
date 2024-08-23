@@ -123,7 +123,7 @@ class _SignupViewState extends State<SignupView> {
               ),
               SizedBox(height: 20.h),
               ElevatedButton(
-                onPressed: _isChecked ? () {} : null, // Disable button if terms are not accepted
+                onPressed: _isChecked ? () {} : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(50.w, 40.h),
                   maximumSize: Size(230.w, 40.h),

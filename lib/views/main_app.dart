@@ -22,9 +22,9 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> _screens = [
     DashboardView(),
-    Container(color: Colors.red), // Temporary screen for testing
+    Container(color: Colors.red),
     PackagesView(),
-    Container(color: Colors.blue),  // Temporary screen for testing
+    Container(color: Colors.blue),
     AccountView(),
   ];
 

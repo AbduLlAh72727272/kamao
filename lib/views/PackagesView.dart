@@ -15,7 +15,6 @@ class PackagesView extends StatelessWidget {
             child: Image.asset(
               VoidImages.packages,
               fit: BoxFit.cover,
-             // height: 100.h,
             ),
           ),
           Center(

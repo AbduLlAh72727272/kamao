@@ -47,7 +47,7 @@ class _AccountViewState extends State<AccountView> {
     setState(() {
       _selectedIndex = index;
     });
-    // Navigation logic removed here; handled by the MainScreen instead
+
   }
 
   @override
@@ -120,7 +120,7 @@ class _AccountViewState extends State<AccountView> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle Save logic here
+
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(100.w, 40.h),
