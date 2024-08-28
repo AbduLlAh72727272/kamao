@@ -12,6 +12,16 @@ class VoidColors {
 
   static const Color darkBlue = Color(0xFF37474F);
   static const Color purple = Color(0xFF7E57C2);
+  static const Color purple_2= Color(0xFFFFD9FF);
+  static const Color light_pink=Color(0xFFFFC5CA);
+  static const Color blue_shade=Color(0xFF454CD1);
+  static const Color light_red=Color(0xFFD55661);
+  static const Color dark_purple=Color(0xFF6D016D);
+  static const Color dark_pink=Color(0xFFEF5261);
+  static const Color darkest_brown=Color(0xFF8A750A);
+  static const Color darkest_pink=Color(0xFFB00F53);
+  static const Color light_yellow=Color(0xFFFFF9D9);
+  static const Color light_green=Color(0xFFE7FFDE);
   static const Color lightGrey = Color(0xFFC3B6B6);
   static const Color red = Color(0xFFFF0000);
 

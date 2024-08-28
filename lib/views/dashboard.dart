@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:kamao/views/remaining_tasks.dart';
 import 'package:kamao/views/settings_view.dart';
 import 'package:kamao/views/verification.dart';
 import 'BalanceDetailsView.dart';
+
 import '../common/custom_bottom_nav_bar.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
@@ -32,258 +34,452 @@ class _DashboardViewState extends State<DashboardView> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset(VoidImages.side, width: 45.w, height: 45.h),
+          icon: Image.asset(VoidImages.side, width: 24.w, height: 24.h),
           onPressed: () {
             Get.to(() => const SettingsView());
           },
         ),
-        centerTitle: true,
+        centerTitle: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Hello!',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  'David Livia',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 10.w),
+            CircleAvatar(
+              backgroundImage: AssetImage(VoidImages.account),
+              radius: 15.r,
+              backgroundColor: Colors.transparent,
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             children: [
-              SizedBox(height: 10.h),
-              // Earnings Tile
+              SizedBox(height: 20.h),
               GestureDetector(
                 onTap: () {
                   Get.to(() => const BalanceDetailsView());
                 },
-                child: Stack(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      VoidImages.small_tile,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 45.h,
-                    ),
-                    Positioned(
-                      left: 20.w,
-                      top: 13.h,
-                      child: Text(
-                        'Total Earnings : \$5,450.500',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => const BalanceDetailsView());
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.42,
+                        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 15.w),
+                        decoration: BoxDecoration(
+                          color: VoidColors.purple_2,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Total Earnings',
+                              style: TextStyle(
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Center(
+                              child: Image.asset(
+                                VoidImages.earning,
+                                width: 48.w,
+                                height: 48.h,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              '\$5,450.500',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: VoidColors.blue_shade,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: 20.w,
-                      top: 13.h,
-                      child: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20.sp),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => VerificationView());
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.42,
+                        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+                        decoration: BoxDecoration(
+                          color: VoidColors.light_pink,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Verify Your Identity',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w600,
+                                color: VoidColors.black,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Center(
+                              child: Image.asset(
+                                VoidImages.identity,
+                                width: 47.w,
+                                height: 48.h,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Verify and get free dollars',
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: VoidColors.light_red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 20.h),
-              // Verify Identity Button
-              Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(()=>VerificationView());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: VoidColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+
+              // Today's Task Container
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 5,
                     ),
-                    child: Text(
-                      'Verify Your Identity',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5.h),
-                  Text(
-                    'Verify and get free dollars',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              // Banner 1 with Get Bonus Button
-              Stack(
-                children: [
-                  Image.asset(
-                    VoidImages.banner_1,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 250.h,
-                  ),
-                  Positioned(
-                    top: 210.h,
-                    bottom: 2.h,
-                    right: 20.w,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add functionality for Get Bonus button
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17.r),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
-                      ),
-                      child: Text(
-                        'Get Bonus',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              // Banner 2 with Text Overlay
-              Stack(
-                children: [
-                  Image.asset(
-                    VoidImages.banner_2,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 135.h,
-                  ),
-                  Positioned(
-                    left: 20.w,
-                    top: 20.h,
-                    child: Column(
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Today's Task",
+                          "Your Today's task\nalmost done!",
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: VoidColors.black,
                           ),
                         ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          'Total videos : 1000',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black,
+                        SizedBox(height: 10.h),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.to(() => RemainingTaskView());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: VoidColors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
+                          ),
+                          child: Text(
+                            'View Task',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: VoidColors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 60.w,
+                          height: 60.h,
+                          child: CircularProgressIndicator(
+                            value: 0.9,
+                            strokeWidth: 6.w,
+                            backgroundColor: VoidColors.dark_pink,
+                            color: VoidColors.dark_purple,
                           ),
                         ),
                         Text(
-                          'Videos Watched : 500',
+                          '90%',
                           style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
+                            color: VoidColors.black,
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.42,
+                    padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 15.w),
+                    decoration: BoxDecoration(
+                      color: VoidColors.light_yellow,
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         Text(
-                          'Pending Videos : 500',
+                          'Targets Reached',
                           style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: VoidColors.black,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Image.asset(
+                          VoidImages.target,
+                          width: 40.w,
+                          height: 40.h,
+                        ),
+                        SizedBox(height: 10.h),
+                        Text(
+                          'Congratulations!\nYou’ve reached every\ntarget set for today.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w600,
+                            color: VoidColors.darkest_brown,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              // Banner 3 with Watch Button
-              Stack(
-                children: [
-                  Image.asset(
-                    VoidImages.banner_3,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 200.h,
-                  ),
-                  Positioned(
-                    top: 150.h,
-                    bottom: 10.h,
-                    right: 100.w,
-                    child: ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: VoidColors.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17.r),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 50.w),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => RemainingTaskView());
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.42,
+                      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 15.w),
+                      decoration: BoxDecoration(
+                        color: VoidColors.light_green,
+                        borderRadius: BorderRadius.circular(15.r),
                       ),
-                      child: Text(
-                        'Watch',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-
-              Stack(
-                children: [
-                  Image.asset(
-                    VoidImages.banner_4,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 230.h,
-                  ),
-                  Positioned(
-                    top: 20.h,
-                    right: 20.w,
-                    child: ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: VoidColors.primary,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: VoidColors.white),
-                          borderRadius: BorderRadius.circular(17.r),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 30.w),
-                      ),
-                      child: Text(
-                        'Invite & Earn',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Unfinished task',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: VoidColors.black,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Image.asset(
+                            VoidImages.unfinished,
+                            width: 40.w,
+                            height: 40.h,
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Hurry Up!\nComplete 02 remaining tasks and get\nAMAZING Bonuses',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w600,
+                              color: VoidColors.darkest_pink,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 30.h),
+
+              SizedBox(height: 20.h),
+
+              // Banners
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  image: DecorationImage(
+                    image: AssetImage(VoidImages.banner_1),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 100.h, horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 10.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add your button action here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(100.w, 30.h),
+                          backgroundColor: VoidColors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 18.w),
+                        ),
+                        child: Text(
+                          'Get Bonus',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: VoidColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+
+              Container(
+                width: 500.w,
+                height: 200.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  image: DecorationImage(
+                    image: AssetImage(VoidImages.banner_3),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 1.h,
+                      right: 10.w,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add your button action here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(100.w, 25.h),
+                          backgroundColor: VoidColors.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 20.w),
+                        ),
+                        child: Text(
+                          'Watch',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: VoidColors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Container(
+                width: double.infinity,
+                height: 200.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  image: DecorationImage(
+                    image: AssetImage(VoidImages.banner_4),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 10.h,
+                      right: 20.w,
+                      child: ElevatedButton(
+                        onPressed: () {
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(100.w, 20.h),
+                          backgroundColor: VoidColors.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
+                        ),
+                        child: Text(
+                          'Invite & Earn',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: VoidColors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
+              SizedBox(height: 20.h),
+              Image.asset(VoidImages.banner_6),
+
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: CustomBottomNavBar(
-      //   selectedIndex: _selectedIndex,
-      //   onItemSelected: _onItemTapped,
-      // ),
     );
   }
 }

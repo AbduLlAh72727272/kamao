@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../controllers/signup_view_controller.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 import 'TermsOfUseView.dart';
 import 'signin.dart';
+import 'dart:io';
 
-class SignupView extends StatefulWidget {
+class SignupView extends StatelessWidget {
   const SignupView({Key? key}) : super(key: key);
 
   @override
-  _SignupViewState createState() => _SignupViewState();
-}
-
-class _SignupViewState extends State<SignupView> {
-  bool _isChecked = false;
-
-  void _onAcceptTerms() {
-    setState(() {
-      _isChecked = true;
-    });
-    Get.back();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final SignupViewController controller = Get.put(SignupViewController());
+
     return Scaffold(
       backgroundColor: VoidColors.primary,
       body: Padding(
@@ -36,17 +26,40 @@ class _SignupViewState extends State<SignupView> {
               SizedBox(height: 80.h),
               Image.asset(
                 VoidImages.logo,
-                width: 118.68.w,
-                height: 127.93.h,
+                width: 77.06.w,
+                height: 83.07.h,
               ),
               SizedBox(height: 5.h),
               Text(
                 'Welcome',
                 style: TextStyle(
-                  fontSize: 24.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
+              ),
+              SizedBox(height: 20.h),
+              GestureDetector(
+                onTap: () {
+                  controller.pickImage();
+                },
+                child: Obx(() {
+                  return CircleAvatar(
+                    radius: 45.r,
+                    backgroundColor: VoidColors.white,
+                    child: controller.profileImage.value == null
+                        ? Icon(Icons.camera_alt, size: 40.sp, color: Colors.grey)
+                        : ClipOval(
+                      child: Image.file(
+                        controller.profileImage.value!,
+                        width: 100.w,
+                        height: 100.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+
+                }),
               ),
               SizedBox(height: 40.h),
               _buildTextField(
@@ -80,22 +93,22 @@ class _SignupViewState extends State<SignupView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Checkbox(
-                      value: _isChecked,
-                      activeColor: VoidColors.black,
-                      checkColor: VoidColors.white,
-                      side: MaterialStateBorderSide.resolveWith(
-                            (states) => BorderSide(
-                          color: VoidColors.white,
-                          width: 2.0,
+                    Obx(() {
+                      return Checkbox(
+                        value: controller.isChecked.value,
+                        activeColor: VoidColors.black,
+                        checkColor: VoidColors.white,
+                        side: MaterialStateBorderSide.resolveWith(
+                              (states) => BorderSide(
+                            color: VoidColors.white,
+                            width: 2.0,
+                          ),
                         ),
-                      ),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isChecked = value!;
-                        });
-                      },
-                    ),
+                        onChanged: (bool? value) {
+                          controller.toggleCheckbox(value);
+                        },
+                      );
+                    }),
                     Text(
                       'Accept ',
                       style: TextStyle(
@@ -106,7 +119,9 @@ class _SignupViewState extends State<SignupView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => TermsOfUseView(onAccept: _onAcceptTerms));
+                        Get.to(() => TermsOfUseView(
+                          onAccept: controller.onAcceptTerms,
+                        ));
                       },
                       child: Text(
                         'Terms and Conditions',
@@ -123,7 +138,7 @@ class _SignupViewState extends State<SignupView> {
               ),
               SizedBox(height: 20.h),
               ElevatedButton(
-                onPressed: _isChecked ? () {} : null,
+                onPressed: controller.isChecked.value ? () {} : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(50.w, 40.h),
                   maximumSize: Size(230.w, 40.h),

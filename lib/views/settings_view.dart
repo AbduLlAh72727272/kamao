@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
+import 'about_kcoins.dart';
 import 'account_view.dart';
 
 class SettingsView extends StatelessWidget {
@@ -40,15 +41,13 @@ class SettingsView extends StatelessWidget {
             }),
             SizedBox(height: 50.h),
             _buildSettingItem(VoidImages.add_user, 'Invite Friends', onTap: () {
-              // Navigate to Invite Friends screen
             }),
             SizedBox(height: 50.h),
             _buildSettingItem(VoidImages.about, 'About K coin', onTap: () {
-              // Navigate to About K coin screen
+              Get.to(()=>AboutKcoins());
             }),
             SizedBox(height: 50.h),
             _buildSettingItem(VoidImages.help, 'Help', onTap: () {
-              // Navigate to Help screen
             }),
             SizedBox(height: 50.h),
             _buildSettingItem(VoidImages.logout, 'Logout', onTap: () {

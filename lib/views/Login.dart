@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:kamao/views/signup.dart';
+import '../controllers/login_view_controller.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 
-class LoginView extends StatefulWidget {
+
+class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  bool _isChecked = false;
-
-  @override
   Widget build(BuildContext context) {
+    final LoginViewController controller = Get.put(LoginViewController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -50,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
             SizedBox(height: 60.h),
             ElevatedButton(
               onPressed: () {
-                // Add your Google sign-in logic here
+
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 55.h),
@@ -85,16 +82,16 @@ class _LoginViewState extends State<LoginView> {
             SizedBox(height: 20.h),
             Row(
               children: [
-                Checkbox(
-                  value: _isChecked,
-                  activeColor: VoidColors.primary,
-                  checkColor: Colors.black,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _isChecked = value ?? false;
-                    });
-                  },
-                ),
+                Obx(() {
+                  return Checkbox(
+                    value: controller.isChecked.value,
+                    activeColor: VoidColors.primary,
+                    checkColor: Colors.black,
+                    onChanged: (bool? value) {
+                      controller.toggleCheckbox(value);
+                    },
+                  );
+                }),
                 Expanded(
                   child: Text(
                     'I agree to the terms and conditions & privacy policy & user agreement',
@@ -144,24 +141,19 @@ class _LoginViewState extends State<LoginView> {
                     color: VoidColors.black,
                   ),
                 ),
-                TextButton(onPressed: (){
+                TextButton(
+                  onPressed: () {
 
-
-                }, child: Text('Click here', style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w700,
-                  color: VoidColors.primary,
+                  },
+                  child: Text(
+                    'Click here',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w700,
+                      color: VoidColors.primary,
+                    ),
+                  ),
                 ),
-                ),
-                )
-                // Text(
-                //   ' Click here',
-                //   style: TextStyle(
-                //     fontSize: 14.sp,
-                //     fontWeight: FontWeight.w700,
-                //     color: VoidColors.primary,
-                //   ),
-                // )
               ],
             ),
           ],

@@ -1,57 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import '../utils/constraints/colors.dart';
-import '../common/custom_bottom_nav_bar.dart';
+import '../../utils/constraints/colors.dart';
+import '../../common/custom_bottom_nav_bar.dart';
+import '../controllers/account_view_controller.dart';
 
-class AccountView extends StatefulWidget {
+
+class AccountView extends StatelessWidget {
   const AccountView({Key? key}) : super(key: key);
 
   @override
-  _AccountViewState createState() => _AccountViewState();
-}
-
-class _AccountViewState extends State<AccountView> {
-  bool _isPasswordFieldsVisible = false;
-  bool _obscureCurrentPassword = true;
-  bool _obscureNewPassword = true;
-  bool _obscureConfirmPassword = true;
-  int _selectedIndex = 4;
-
-  void _togglePasswordFieldsVisibility() {
-    setState(() {
-      _isPasswordFieldsVisible = !_isPasswordFieldsVisible;
-    });
-  }
-
-  void _toggleCurrentPasswordVisibility() {
-    setState(() {
-      _obscureCurrentPassword = !_obscureCurrentPassword;
-    });
-  }
-
-  void _toggleNewPasswordVisibility() {
-    setState(() {
-      _obscureNewPassword = !_obscureNewPassword;
-    });
-  }
-
-  void _toggleConfirmPasswordVisibility() {
-    setState(() {
-      _obscureConfirmPassword = !_obscureConfirmPassword;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-  }
-
-  @override
   Widget build(BuildContext context) {
+
+    final AccountViewController controller = Get.put(AccountViewController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -92,35 +54,43 @@ class _AccountViewState extends State<AccountView> {
                 initialValue: 'john.doe@example.com',
               ),
               SizedBox(height: 20.h),
-              _buildPasswordSection(),
-              if (_isPasswordFieldsVisible) ...[
-                SizedBox(height: 15.h),
-                _buildPasswordField(
-                  hintText: 'Current Password',
-                  icon: Icons.visibility_outlined,
-                  obscureText: _obscureCurrentPassword,
-                  togglePasswordVisibility: _toggleCurrentPasswordVisibility,
-                ),
-                SizedBox(height: 15.h),
-                _buildPasswordField(
-                  hintText: 'New Password',
-                  icon: Icons.visibility_outlined,
-                  obscureText: _obscureNewPassword,
-                  togglePasswordVisibility: _toggleNewPasswordVisibility,
-                ),
-                SizedBox(height: 15.h),
-                _buildPasswordField(
-                  hintText: 'Confirm New Password',
-                  icon: Icons.visibility_outlined,
-                  obscureText: _obscureConfirmPassword,
-                  togglePasswordVisibility: _toggleConfirmPasswordVisibility,
-                ),
-              ],
+              _buildPasswordSection(controller),
+              Obx(() {
+                if (controller.isPasswordFieldsVisible.value) {
+                  return Column(
+                    children: [
+                      SizedBox(height: 15.h),
+                      _buildPasswordField(
+                        hintText: 'Current Password',
+                        icon: Icons.visibility_outlined,
+                        obscureText: controller.obscureCurrentPassword.value,
+                        togglePasswordVisibility: controller.toggleCurrentPasswordVisibility,
+                      ),
+                      SizedBox(height: 15.h),
+                      _buildPasswordField(
+                        hintText: 'New Password',
+                        icon: Icons.visibility_outlined,
+                        obscureText: controller.obscureNewPassword.value,
+                        togglePasswordVisibility: controller.toggleNewPasswordVisibility,
+                      ),
+                      SizedBox(height: 15.h),
+                      _buildPasswordField(
+                        hintText: 'Confirm New Password',
+                        icon: Icons.visibility_outlined,
+                        obscureText: controller.obscureConfirmPassword.value,
+                        togglePasswordVisibility: controller.toggleConfirmPasswordVisibility,
+                      ),
+                    ],
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              }),
               SizedBox(height: 30.h),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-
+                    // Handle save action
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(100.w, 40.h),
@@ -148,8 +118,8 @@ class _AccountViewState extends State<AccountView> {
         ),
       ),
       // bottomNavigationBar: CustomBottomNavBar(
-      //   selectedIndex: _selectedIndex,
-      //   onItemSelected: _onItemTapped,
+      //   selectedIndex: controller.selectedIndex.value,
+      //   onItemSelected: controller.onItemTapped,
       // ),
     );
   }
@@ -194,9 +164,9 @@ class _AccountViewState extends State<AccountView> {
     );
   }
 
-  Widget _buildPasswordSection() {
+  Widget _buildPasswordSection(AccountViewController controller) {
     return GestureDetector(
-      onTap: _togglePasswordFieldsVisibility,
+      onTap: controller.togglePasswordFieldsVisibility,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.h),
         decoration: BoxDecoration(
@@ -218,11 +188,15 @@ class _AccountViewState extends State<AccountView> {
                 ),
               ),
             ),
-            Icon(
-              _isPasswordFieldsVisible ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_up_outlined,
-              color: Colors.black,
-              size: 24.sp,
-            ),
+            Obx(() {
+              return Icon(
+                controller.isPasswordFieldsVisible.value
+                    ? Icons.keyboard_arrow_down_outlined
+                    : Icons.keyboard_arrow_up_outlined,
+                color: Colors.black,
+                size: 24.sp,
+              );
+            }),
             SizedBox(width: 10.w),
           ],
         ),
