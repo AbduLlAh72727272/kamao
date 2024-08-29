@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../controllers/signup_view_controller.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 import 'OtpView.dart';
@@ -51,7 +52,7 @@ class ForgotPasswordView extends StatelessWidget {
             SizedBox(height: 30.h),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => const OtpView());
+
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(50.w, 40.h),

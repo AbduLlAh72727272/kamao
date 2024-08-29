@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:kamao/views/remaining_tasks.dart';
 import 'package:kamao/views/settings_view.dart';
 import 'package:kamao/views/verification.dart';
+import '../controllers/UserController.dart';
 import 'BalanceDetailsView.dart';
-
-import '../common/custom_bottom_nav_bar.dart';
+import '../controllers/DashboardController.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 
@@ -18,6 +18,9 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  final DashboardController _dashboardController = Get.put(DashboardController());
+  final UserController _userController = Get.find<UserController>();
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -40,38 +43,46 @@ class _DashboardViewState extends State<DashboardView> {
           },
         ),
         centerTitle: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Hello!',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
+        title: Obx(() {
+          if (_userController.isLoading.value) {
+            return CircularProgressIndicator();
+          }
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Hello!',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                Text(
-                  'David Livia',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  Text(
+                    _userController.user.value?.name ?? 'Unknown User',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(width: 10.w),
-            CircleAvatar(
-              backgroundImage: AssetImage(VoidImages.account),
-              radius: 15.r,
-              backgroundColor: Colors.transparent,
-            ),
-          ],
-        ),
+                ],
+              ),
+              SizedBox(width: 10.w),
+              CircleAvatar(
+                backgroundImage: _userController.user.value?.profilePic.isNotEmpty == true
+                    ? NetworkImage(_userController.user.value!.profilePic)
+                    : AssetImage(VoidImages.account) as ImageProvider,
+                radius: 15.r,
+                backgroundColor: Colors.transparent,
+              ),
+            ],
+          );
+        }),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -117,14 +128,20 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             ),
                             SizedBox(height: 10.h),
-                            Text(
-                              '\$5,450.500',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: VoidColors.blue_shade,
-                              ),
-                            ),
+                            Obx(() {
+                              if (_dashboardController.isLoadingEarnings.value) {
+                                return CircularProgressIndicator();
+                              }
+
+                              return Text(
+                                '\$${(_dashboardController.earnings.value * 0.05).toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: VoidColors.blue_shade,
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),
@@ -178,7 +195,6 @@ class _DashboardViewState extends State<DashboardView> {
               ),
               SizedBox(height: 20.h),
 
-              // Today's Task Container
               Container(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
                 decoration: BoxDecoration(
@@ -340,7 +356,6 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                 ],
               ),
-
               SizedBox(height: 20.h),
 
               // Banners
@@ -368,7 +383,6 @@ class _DashboardViewState extends State<DashboardView> {
                       top: 10.h,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add your button action here
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(100.w, 30.h),
@@ -410,7 +424,7 @@ class _DashboardViewState extends State<DashboardView> {
                       right: 10.w,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add your button action here
+
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(100.w, 25.h),
@@ -472,8 +486,9 @@ class _DashboardViewState extends State<DashboardView> {
                 ),
               ),
 
-
               SizedBox(height: 20.h),
+              Image.asset(VoidImages.banner_5),
+              SizedBox(height:20.h),
               Image.asset(VoidImages.banner_6),
 
             ],

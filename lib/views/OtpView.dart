@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:kamao/views/reset_password.dart';
+import '../controllers/OtpController.dart';
 import '../utils/constraints/colors.dart';
 
 class OtpView extends StatefulWidget {
-  const OtpView({Key? key}) : super(key: key);
+  final String email;
+  const OtpView({Key? key, required this.email}) : super(key: key);
 
   @override
   _OtpViewState createState() => _OtpViewState();
@@ -15,10 +16,13 @@ class OtpView extends StatefulWidget {
 class _OtpViewState extends State<OtpView> {
   final List<TextEditingController> _otpControllers = List.generate(5, (index) => TextEditingController());
   int _resendCodeIn = 59;
+  late OtpController otpController;
 
   @override
   void initState() {
     super.initState();
+    otpController = Get.put(OtpController(widget.email));
+    otpController.sendOtp();
     _startTimer();
   }
 
@@ -34,9 +38,12 @@ class _OtpViewState extends State<OtpView> {
     });
   }
 
+  String _getOtp() {
+    return _otpControllers.map((controller) => controller.text).join();
+  }
+
   @override
   void dispose() {
-    // Dispose all the controllers when not needed
     for (var controller in _otpControllers) {
       controller.dispose();
     }
@@ -97,39 +104,58 @@ class _OtpViewState extends State<OtpView> {
               ),
             ),
             SizedBox(height: 20.h),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(() => const ResetPasswordView());
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 55.h),
-                backgroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 15.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Verify',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            Obx(() {
+              return ElevatedButton(
+                onPressed: otpController.isVerifyButtonEnabled.value && !otpController.isLoading.value
+                    ? () {
+                  String otp = _getOtp();
+                  otpController.verifyOtp(otp);
+                }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 55.h),
+                  backgroundColor: Colors.black,
+                  padding: EdgeInsets.symmetric(vertical: 15.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r),
                   ),
                 ),
-              ),
-            ),
+                child: Center(
+                  child: Text(
+                    otpController.isLoading.value ? 'Loading...' : 'Verify',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }),
             SizedBox(height: 20.h),
-            Text(
-              'Resend code in $_resendCodeIn sec',
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: VoidColors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            Obx(() {
+              return Text(
+                'Resend code in ${otpController.resendCodeIn} sec',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: VoidColors.white,
+                ),
+                textAlign: TextAlign.center,
+              );
+            }),
+
+
+            SizedBox(height: 20.h),
+            // Text(
+            //   'Resend code in $_resendCodeIn sec',
+            //   style: TextStyle(
+            //     fontSize: 14.sp,
+            //     fontWeight: FontWeight.w500,
+            //     color: VoidColors.white,
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/signup_view_controller.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
+import 'OtpView.dart';
 import 'TermsOfUseView.dart';
 import 'signin.dart';
 import 'dart:io';
@@ -58,7 +59,6 @@ class SignupView extends StatelessWidget {
                       ),
                     ),
                   );
-
                 }),
               ),
               SizedBox(height: 40.h),
@@ -66,26 +66,32 @@ class SignupView extends StatelessWidget {
                 context,
                 hintText: 'Name',
                 icon: Icons.person_outline_rounded,
+                controller: controller.nameController,
               ),
               SizedBox(height: 15.h),
               _buildTextField(
                 context,
                 hintText: 'Email',
                 icon: Icons.email_outlined,
+                controller: controller.emailController,
               ),
               SizedBox(height: 15.h),
-              _buildTextField(
+              _buildPasswordField(
                 context,
                 hintText: 'Password',
                 icon: Icons.lock_outline_rounded,
-                obscureText: true,
+                controller: controller.passwordController,
+                isPasswordVisible: controller.isPasswordVisible,
+                toggleVisibility: controller.togglePasswordVisibility,
               ),
               SizedBox(height: 15.h),
-              _buildTextField(
+              _buildPasswordField(
                 context,
                 hintText: 'Re Enter Password',
                 icon: Icons.lock_outline_rounded,
-                obscureText: true,
+                controller: controller.rePasswordController,
+                isPasswordVisible: controller.isRePasswordVisible,
+                toggleVisibility: controller.toggleRePasswordVisibility,
               ),
               SizedBox(height: 15.h),
               Center(
@@ -137,29 +143,36 @@ class SignupView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
-              ElevatedButton(
-                onPressed: controller.isChecked.value ? () {} : null,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(50.w, 40.h),
-                  maximumSize: Size(230.w, 40.h),
-                  backgroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: VoidColors.white),
-                    borderRadius: BorderRadius.circular(25.r),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Sign up',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
+              Obx(() {
+                return ElevatedButton(
+                  onPressed: controller.isFormValid.value
+                      ? ()async {
+                  await  controller.signup();
+                    Get.to(() => OtpView(email: SignupViewController().emailController.text));
+                  }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(50.w, 40.h),
+                    maximumSize: Size(230.w, 40.h),
+                    backgroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: VoidColors.white),
+                      borderRadius: BorderRadius.circular(25.r),
                     ),
                   ),
-                ),
-              ),
+                  child: Center(
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              }),
               SizedBox(height: 20.h),
               Row(
                 children: [
@@ -249,9 +262,18 @@ class SignupView extends StatelessWidget {
   Widget _buildTextField(BuildContext context,
       {required String hintText,
         required IconData icon,
+        required TextEditingController controller,
         bool obscureText = false}) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
+      onChanged: (value) {
+        controller.text = value;
+        controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.text.length),
+        );
+        Get.find<SignupViewController>().validateForm();
+      },
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(
@@ -268,5 +290,52 @@ class SignupView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildPasswordField(
+      BuildContext context, {
+        required String hintText,
+        required IconData icon,
+        required TextEditingController controller,
+        required RxBool isPasswordVisible,
+        required VoidCallback toggleVisibility,
+      }) {
+    return Obx(() {
+      return TextField(
+        controller: controller,
+        obscureText: !isPasswordVisible.value,
+        onChanged: (value) {
+          controller.text = value;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: controller.text.length),
+          );
+          Get.find<SignupViewController>().validateForm();
+        },
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400,
+            color: VoidColors.lightGrey,
+          ),
+          prefixIcon: Icon(icon, color: VoidColors.lightGrey),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isPasswordVisible.value
+                  ? Icons.visibility
+                  : Icons.visibility_off,
+              color: VoidColors.lightGrey,
+            ),
+            onPressed: toggleVisibility,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.r),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      );
+    });
   }
 }

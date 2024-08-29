@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import '../controllers/SigninViewController.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
-import 'dashboard.dart';
-import 'forgetpasswordview.dart';
 import 'main_app.dart';
-import 'reset_password.dart';
+import 'forgetpasswordview.dart';
 
 class SigninView extends StatelessWidget {
   const SigninView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final signinController = Get.put(SigninViewController());
+
     return Scaffold(
       backgroundColor: VoidColors.primary,
       body: Padding(
@@ -40,8 +40,9 @@ class SigninView extends StatelessWidget {
               SizedBox(height: 30.h),
               _buildTextField(
                 context,
-                hintText: 'Name',
-                icon: Icons.person_outline_rounded,
+                hintText: 'Email',
+                icon: Icons.email_outlined,
+                controller: signinController.emailController,
               ),
               SizedBox(height: 15.h),
               _buildTextField(
@@ -49,6 +50,7 @@ class SigninView extends StatelessWidget {
                 hintText: 'Password',
                 icon: Icons.lock_outline_rounded,
                 obscureText: true,
+                controller: signinController.passwordController,
               ),
               SizedBox(height: 15.h),
               Align(
@@ -68,31 +70,35 @@ class SigninView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 70.h),
-              ElevatedButton(
-                onPressed: () {
-                  Get.to(() =>  MainApp());
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(50.w, 40.h),
-                  maximumSize: Size(230.w, 40.h),
-                  backgroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: VoidColors.white),
-                    borderRadius: BorderRadius.circular(25.r),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Sign in',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
+              Obx(() {
+                return ElevatedButton(
+                  onPressed: signinController.isLoading.value
+                      ? null
+                      : () {
+                    signinController.signin();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(50.w, 40.h),
+                    maximumSize: Size(230.w, 40.h),
+                    backgroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: VoidColors.white),
+                      borderRadius: BorderRadius.circular(25.r),
                     ),
                   ),
-                ),
-              ),
+                  child: Center(
+                    child: Text(
+                      signinController.isLoading.value ? 'Signing in...' : 'Sign in',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              }),
               SizedBox(height: 20.h),
               Row(
                 children: [
@@ -123,7 +129,7 @@ class SigninView extends StatelessWidget {
               SizedBox(height: 10.h),
               ElevatedButton(
                 onPressed: () {
-
+                  // Handle Google Sign-In here
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -183,8 +189,10 @@ class SigninView extends StatelessWidget {
   Widget _buildTextField(BuildContext context,
       {required String hintText,
         required IconData icon,
-        bool obscureText = false}) {
+        bool obscureText = false,
+        required TextEditingController controller}) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: hintText,

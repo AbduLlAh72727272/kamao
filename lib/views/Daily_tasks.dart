@@ -1,11 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
+import '../controllers/UserController.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
+import '../widgets/video_card.dart';
 
 class DailyTaskView extends StatelessWidget {
+  final UserController userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +34,6 @@ class DailyTaskView extends StatelessWidget {
               ),
             ),
           ),
-          // Main Content
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h).copyWith(bottom: 57.sp),
             child: Column(
@@ -49,10 +51,14 @@ class DailyTaskView extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-                    CircleAvatar(
-                      backgroundImage: AssetImage(VoidImages.account),
-                      radius: 20.r,
-                    ),
+                    Obx(() {
+                      return CircleAvatar(
+                        backgroundImage: userController.user.value?.profilePic.isNotEmpty == true
+                            ? NetworkImage(userController.user.value!.profilePic)
+                            : AssetImage(VoidImages.account) as ImageProvider,
+                        radius: 20.r,
+                      );
+                    }),
                   ],
                 ),
                 SizedBox(height: 30.h),
@@ -93,26 +99,22 @@ class DailyTaskView extends StatelessWidget {
                     children: [
                       ListView(
                         children: [
-                          _buildVideoCard(
-                            context,
-                            VoidImages.youtube_1,
-                            'Tour Guide',
+                          VideoCard(
+                            image: VoidImages.youtube_1,
+                            title: 'Tour Guide',
                           ),
                           SizedBox(height: 15.h),
-                          _buildVideoCard(
-                            context,
-                            VoidImages.youtube_2,
-                            'Sonika Agarwal Visit',
+                          VideoCard(
+                            image: VoidImages.youtube_2,
+                            title: 'Sonika Agarwal Visit',
                           ),
                           SizedBox(height: 15.h),
-                          _buildVideoCard(
-                            context,
-                            VoidImages.youtube_3,
-                            'Howard Bouchevereau Famous',
+                          VideoCard(
+                            image: VoidImages.youtube_3,
+                            title: 'Howard Bouchevereau Famous',
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
@@ -120,7 +122,6 @@ class DailyTaskView extends StatelessWidget {
             ),
           ),
           Positioned(
-
             bottom: 10.h,
             left: 0,
             right: 0,
@@ -156,43 +157,6 @@ class DailyTaskView extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVideoCard(BuildContext context, String image, String title) {
-    return Container(
-      width: double.infinity,
-      height: 180.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            bottom: 10.h,
-            left: 10.w,
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: VoidColors.black,
-                backgroundColor: VoidColors.white.withOpacity(0.6),
-              ),
-            ),
-          ),
-          Image.asset(
-            VoidImages.play_button,
-            width: 40.w,
-            height: 40.h,
           ),
         ],
       ),

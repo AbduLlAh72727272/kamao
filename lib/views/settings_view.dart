@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:kamao/views/signin.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
+import 'Login.dart';
 import 'about_kcoins.dart';
 import 'account_view.dart';
 
@@ -98,7 +101,7 @@ class SettingsView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Log Out ?',
+                  'Log Out?',
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.w600,
@@ -117,18 +120,26 @@ class SettingsView extends StatelessWidget {
                 ),
                 SizedBox(height: 30.h),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    final storage = GetStorage();
+
+                    await storage.erase();
+
+                    Get.back();
+                    Get.offAll(() => const SigninView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.yellow,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.r),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 60.w),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.h,
+                      horizontal: 60.w,
+                    ),
                   ),
                   child: Text(
-                    'LogOut',
+                    'Log Out',
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
@@ -139,7 +150,8 @@ class SettingsView extends StatelessWidget {
                 SizedBox(height: 10.h),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // Close the dialog
+                    Get.back();
                   },
                   child: Text(
                     'Cancel',

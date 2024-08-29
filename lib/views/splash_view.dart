@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kamao/utils/constraints/colors.dart';
-import '../../../../utils/constraints/image_strings.dart';
+import '../utils/constraints/colors.dart';
+import '../utils/constraints/image_strings.dart';
 import '../controllers/splash_controller.dart';
-
 
 class SplashView extends GetView<SplashController> {
   const SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final SplashController splashController = Get.put(SplashController());
+
     return Scaffold(
       backgroundColor: VoidColors.primary,
       body: Center(
